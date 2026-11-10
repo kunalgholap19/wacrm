@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+// @ts-check
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
@@ -18,6 +18,8 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
  *   - Permissions-Policy: we don't use camera / microphone / etc, so
  *     deny them. A supply-chain compromise or a forgotten plugin
  *     can't silently opt back in.
+ *
+ * @type {import('next').NextConfig['headers'] extends () => Promise<infer T> ? T[number]['headers'] : never}
  */
 const SECURITY_HEADERS = [
   {
@@ -61,13 +63,16 @@ const SECURITY_HEADERS = [
       "form-action 'self'",
     ].join("; "),
   },
-] as const;
+];
 
-const APP_LOCALE = ["en", "pt", "es", "ko"].includes(process.env.NEXT_PUBLIC_APP_LOCALE ?? "")
-  ? (process.env.NEXT_PUBLIC_APP_LOCALE as string)
+const APP_LOCALE = ["en", "pt", "es", "ko"].includes(
+  process.env.NEXT_PUBLIC_APP_LOCALE ?? ""
+)
+  ? process.env.NEXT_PUBLIC_APP_LOCALE
   : "en";
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   turbopack: {
     resolveAlias: {
       "@app-messages": `./messages/${APP_LOCALE}.json`,
@@ -163,3 +168,4 @@ const nextConfig: NextConfig = {
 };
 
 export default withNextIntl(nextConfig);
+
