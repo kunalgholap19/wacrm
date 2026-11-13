@@ -19,7 +19,7 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
  *     deny them. A supply-chain compromise or a forgotten plugin
  *     can't silently opt back in.
  *
- * @type {import('next').NextConfig['headers'] extends () => Promise<infer T> ? T[number]['headers'] : never}
+ * @type {Array<{ key: string; value: string }>}
  */
 const SECURITY_HEADERS = [
   {
@@ -112,8 +112,8 @@ const nextConfig = {
     "*.loca.lt",
     ...(process.env.ALLOWED_DEV_ORIGINS
       ? process.env.ALLOWED_DEV_ORIGINS.split(",")
-          .map((origin) => origin.trim())
-          .filter(Boolean)
+        .map((origin) => origin.trim())
+        .filter(Boolean)
       : []),
   ],
 
